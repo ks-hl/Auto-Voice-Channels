@@ -35,7 +35,10 @@ async def execute(ctx, params):
                     )
                 try:
                     await vc.set_permissions(author, connect=True)
-                    await vc.set_permissions(guild.default_role, connect=False)
+                    
+                    perms = vc.overwrites_for(guild.default_role)
+                    perms.update(connect=False)
+                    await vc.set_permissions(guild.default_role, overwrite=perms)
                 except discord.errors.Forbidden:
                     return False, (
                         "I don't have permission to do that."

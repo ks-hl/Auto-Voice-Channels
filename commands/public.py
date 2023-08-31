@@ -25,7 +25,9 @@ async def execute(ctx, params):
                         "Use `{}private` to make it private instead.".format(ctx["print_prefix"])
                     )
                 try:
-                    await vc.set_permissions(guild.default_role, connect=True)
+                    perms = vc.overwrites_for(guild.default_role)
+                    perms.update(connect=True)
+                    await vc.set_permissions(guild.default_role, overwrite=perms)
                 except discord.errors.Forbidden:
                     return False, (
                         "I don't have permission to do that."
